@@ -1,0 +1,15 @@
+{
+	"name": "<%%name%%>",
+	"version": "0.0.0",
+	"scripts": {
+		"slides:assets": "mkdir -p html/assets && cp -a slides/assets/. html/assets/",
+		"slides:build": "npm run slides:assets && pandoc --section-divs -s -t revealjs slides/*.md -o html/index.html --verbose --slide-level=1 --from markdown-yaml_metadata_block --variable theme='beige'",
+		"slides:watch": "nodemon --exec \"npm run slides:build\" slides/*.md",
+		"slides:deploy": "npm run slides:assets && git subtree push --prefix html origin gh-pages"
+	},
+	"private": true,
+	"dependencies": {},
+	"devDependencies": {
+		"nodemon": "^1.19.1"
+	}
+}
