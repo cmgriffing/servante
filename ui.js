@@ -245,40 +245,38 @@ function startScaffoldingFileStructure(inputResults) {
 	);
 
 	// read files from plugin path
-	const files = glob
-		.sync(`${pluginPath}/**/*`, { nodir: true })
-		.map(filePath => {
-			const relativeFilePath = filePath.slice(pluginPath.length);
-			const newFilePath = `${projectPath}${relativeFilePath}`;
-			fs.ensureFileSync(newFilePath);
+	glob.sync(`${pluginPath}/**/*`, { nodir: true }).map(filePath => {
+		const relativeFilePath = filePath.slice(pluginPath.length);
+		const newFilePath = `${projectPath}${relativeFilePath}`;
+		fs.ensureFileSync(newFilePath);
 
-			if (
-				![
-					".gif",
-					".jpg",
-					".jpeg",
-					".bmp",
-					".png",
-					".eot",
-					".ttf",
-					".woff",
-					".woff2",
-					".wav",
-					".pdf"
-				].includes(path.extname(filePath))
-			) {
-				const interpolatedFileContents = mustache.render(
-					fs.readFileSync(filePath, { encoding: "utf-8" }),
-					{
-						name: inputResults.projectName
-					},
-					{},
-					["<%%", "%%>"]
-				);
-				fs.writeFileSync(newFilePath, interpolatedFileContents);
-			} else {
-				const fileContents = fs.readFileSync(filePath);
-				fs.writeFileSync(newFilePath, fileContents);
-			}
-		});
+		if (
+			![
+				".gif",
+				".jpg",
+				".jpeg",
+				".bmp",
+				".png",
+				".eot",
+				".ttf",
+				".woff",
+				".woff2",
+				".wav",
+				".pdf"
+			].includes(path.extname(filePath))
+		) {
+			const interpolatedFileContents = mustache.render(
+				fs.readFileSync(filePath, { encoding: "utf-8" }),
+				{
+					name: inputResults.projectName
+				},
+				{},
+				["<%%", "%%>"]
+			);
+			fs.writeFileSync(newFilePath, interpolatedFileContents);
+		} else {
+			const fileContents = fs.readFileSync(filePath);
+			fs.writeFileSync(newFilePath, fileContents);
+		}
+	});
 }

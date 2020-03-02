@@ -35,16 +35,24 @@ html {
 	display: none !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	text-shadow: 0 0 0 #000 !important;
 }
 
 .reveal pre code {
 	overflow: hidden !important;
-	font-family: Courier, 'Courier New', monospace !important;
+	font-family: Courier, "Courier New", monospace !important;
 }
 
-ul, ol, div, p {
+ul,
+ol,
+div,
+p {
 	visibility: visible;
 	position: static;
 	width: auto;
