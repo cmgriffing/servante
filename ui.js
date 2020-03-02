@@ -58,10 +58,10 @@ const App = ({ name }) => {
 		setProjectPathSelected(true);
 	};
 
-	const handleOutputFormatSelect = item => {
+	const handleOutputFormatSelect = async item => {
 		setSelectedOutputFormat(item);
 		// kick off file creation
-		startScaffoldingFileStructure({
+		await startScaffoldingFileStructure({
 			projectName,
 			projectPath,
 			selectedInputFormat,
@@ -234,7 +234,7 @@ function extractOptions(plugins) {
 	return formatSets;
 }
 
-function startScaffoldingFileStructure(inputResults) {
+async function startScaffoldingFileStructure(inputResults) {
 	// coerce projectPath
 	const projectPath = path.resolve(inputResults.projectPath);
 
@@ -245,38 +245,40 @@ function startScaffoldingFileStructure(inputResults) {
 	);
 
 	// read files from plugin path
-	glob.sync(`${pluginPath}/**/*`, { nodir: true }).map(filePath => {
-		const relativeFilePath = filePath.slice(pluginPath.length);
-		const newFilePath = `${projectPath}${relativeFilePath}`;
-		fs.ensureFileSync(newFilePath);
+	return Promise.all(
+		glob.sync(`${pluginPath}/**/*`, { nodir: true }).map(async filePath => {
+			const relativeFilePath = filePath.slice(pluginPath.length);
+			const newFilePath = `${projectPath}${relativeFilePath}`;
+			await fs.ensureFile(newFilePath);
 
-		if (
-			![
-				".gif",
-				".jpg",
-				".jpeg",
-				".bmp",
-				".png",
-				".eot",
-				".ttf",
-				".woff",
-				".woff2",
-				".wav",
-				".pdf"
-			].includes(path.extname(filePath))
-		) {
-			const interpolatedFileContents = mustache.render(
-				fs.readFileSync(filePath, { encoding: "utf-8" }),
-				{
-					name: inputResults.projectName
-				},
-				{},
-				["<%%", "%%>"]
-			);
-			fs.writeFileSync(newFilePath, interpolatedFileContents);
-		} else {
-			const fileContents = fs.readFileSync(filePath);
-			fs.writeFileSync(newFilePath, fileContents);
-		}
-	});
+			if (
+				![
+					".gif",
+					".jpg",
+					".jpeg",
+					".bmp",
+					".png",
+					".eot",
+					".ttf",
+					".woff",
+					".woff2",
+					".wav",
+					".pdf"
+				].includes(path.extname(filePath))
+			) {
+				const interpolatedFileContents = mustache.render(
+					await fs.readFile(filePath, { encoding: "utf-8" }),
+					{
+						name: inputResults.projectName
+					},
+					{},
+					["<%%", "%%>"]
+				);
+				await fs.writeFile(newFilePath, interpolatedFileContents);
+			} else {
+				const fileContents = await fs.readFile(filePath);
+				await fs.writeFile(newFilePath, fileContents);
+			}
+		})
+	);
 }
