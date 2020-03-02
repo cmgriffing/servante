@@ -1,6 +1,6 @@
 {
 	"name": "servante",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"license": "MIT",
 	"bin": "cli.js",
 	"engines": {
@@ -12,7 +12,8 @@
 	"files": [
 		"cli.js",
 		"ui.js",
-		"error-boundary.js"
+		"error-boundary.js",
+		"plugins"
 	],
 	"dependencies": {
 		"cli-spinners": "^2.2.0",
