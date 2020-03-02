@@ -1,6 +1,6 @@
 {
 	"name": "servante",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"license": "MIT",
 	"bin": "cli.js",
 	"engines": {
@@ -17,6 +17,7 @@
 	"dependencies": {
 		"cli-spinners": "^2.2.0",
 		"fs-extra": "^8.1.0",
+		"glob": "^7.1.6",
 		"import-jsx": "^3.1.0",
 		"ink": "2.6.0",
 		"ink-big-text": "^1.0.1",
