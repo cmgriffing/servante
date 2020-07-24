@@ -42,8 +42,8 @@ const App = ({ name }) => {
 	const [selectedOutputFormat, setSelectedOutputFormat] = useState(null);
 	const [finished, setFinished] = useState(false);
 	const [projectName, setProjectName] = useState("");
-	const [projectPath, setProjectPath] = useState("");
 	const [projectNameSelected, setProjectNameSelected] = useState(false);
+	const [projectPath, setProjectPath] = useState("");
 	const [projectPathSelected, setProjectPathSelected] = useState(false);
 
 	const defaultProjectName = "example-presentation";
