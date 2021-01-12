@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"scripts": {
 		"slides:assets:mkdirp": "shx mkdir -p html/assets",
-		"slides:assets:cp": "shx cp -PR slides/assets/ html/assets/",
+		"slides:assets:cp": "shx cp -PR slides/assets/* html/assets/",
 		"slides:assets": "run-s slides:assets:mkdirp  slides:assets:cp",
 		"slides:build:pandoc": "pandoc --section-divs -s -t revealjs slides/*.md -o html/index.html --verbose --slide-level=1 --from markdown-yaml_metadata_block --variable theme='beige'",
 		"slides:build": "run-s slides:assets  slides:build:pandoc",
