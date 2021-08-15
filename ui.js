@@ -59,6 +59,7 @@ const App = ({ name }) => {
 	};
 
 	const handleOutputFormatSelect = async item => {
+		console.log({ item });
 		setSelectedOutputFormat(item);
 		// kick off file creation
 		await startScaffoldingFileStructure({
@@ -130,10 +131,7 @@ const App = ({ name }) => {
 			{projectName && projectPath && (
 				<>
 					<Text>Select an Input format:</Text>
-					<SelectInput
-						items={formatSets.inputFormats}
-						onSelect={setSelectedInputFormat}
-					/>
+					<SelectInput items={formatSets} onSelect={setSelectedInputFormat} />
 				</>
 			)}
 			{selectedInputFormat && (
@@ -200,17 +198,17 @@ function loadPlugins() {
 	const loadedPlugins = pluginJsonFiles.map(filePath =>
 		JSON.parse(fs.readFileSync(filePath, { encoding: "utf-8" }))
 	);
+
 	return loadedPlugins;
 }
 
 function extractOptions(plugins) {
 	const formatSets = plugins.reduce(
 		(accumulator, plugin) => {
-			const existingInputType = accumulator.inputFormats.find(
-				inputFormat => inputFormat.label === plugin.pluginType
-			);
+			const existingInputType = accumulator.inputFormats[plugin.pluginType];
 			if (!existingInputType) {
-				accumulator.inputFormats.push({
+				console.log("no existing input type");
+				accumulator.inputFormats[plugin.pluginType] = {
 					label: plugin.pluginType,
 					value: plugin.pluginType,
 					children: [
@@ -220,18 +218,27 @@ function extractOptions(plugins) {
 							value: plugin.name
 						}
 					]
-				});
+				};
 			} else {
-				existingInputType.children.push(plugin);
+				existingInputType.children.push({
+					...plugin,
+					label: plugin.displayName,
+					value: plugin.name
+				});
+				console.log(
+					{ plugin, existingInputType },
+					"FOOOOOO",
+					accumulator.inputFormats["markdown"].children
+				);
 			}
 			return accumulator;
 		},
 		{
-			inputFormats: []
+			inputFormats: {}
 		}
 	);
 
-	return formatSets;
+	return Object.values(formatSets.inputFormats) || [];
 }
 
 async function startScaffoldingFileStructure(inputResults) {
